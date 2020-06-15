@@ -1,6 +1,11 @@
 
 async function dataAsync() {
-    let response = await fetch('http://127.0.0.1:3000/todo/list');
+    let response = await fetch('http://127.0.0.1:3000/todo/list',{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    });
     let data = await response.json();
     insertdataAsyn(data);
 }
@@ -29,15 +34,31 @@ dataAsync();
 
 function getInputValue(){
     let inputVal = document.getElementById("myInput").value;
-    fetch('http://127.0.0.1:3000/todo/add/'+inputVal,{
+    fetch('http://127.0.0.1:3000/todo/add',{
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            user: {
+                value: inputVal
+            }
+        })
     });
     document.location.reload();
 }
 
 function deleteValue(){
-    fetch('http://127.0.0.1:3000/todo/delete/'+event.srcElement.id,{
-        method: 'DELETE'
+    fetch('http://127.0.0.1:3000/todo/delete',{
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            user: {
+                id: event.srcElement.id
+            }
+        })
     });
     document.location.reload();
 }
@@ -52,8 +73,17 @@ function editValue(){
 
 function geteditedValue(){
     let new_value = document.getElementById("myInput").value
-    fetch('http://127.0.0.1:3000/todo/edit/'+old_value + '/' + new_value,{
-        method: 'PUT'
+    fetch('http://127.0.0.1:3000/todo/edit',{
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            user: {
+                old: old_value,
+                new: new_value
+            }
+        })
     });
     document.getElementById("myBtn").style.display = "block";
     document.getElementById("myBtn_edit").style.display = "none";

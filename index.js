@@ -4,11 +4,20 @@ let todoRoute = require('./todoRoute.js');
 const fetch = require("node-fetch");
 let cors = require('cors')
 
+// Parse URL-encoded bodies (as sent by HTML forms)
+app.use(express.urlencoded());
+
+// Parse JSON bodies (as sent by API clients)
+app.use(express.json());
+
+
+
 app.use(cors({origin:true}))
 app.use('/todo', todoRoute);
 app.listen(3000, function() {
     console.log("server is running on port 3000");
 });
+
 
 once = ()=>{
     let obj = {

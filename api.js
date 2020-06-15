@@ -1,0 +1,62 @@
+
+async function dataAsync() {
+    let response = await fetch('http://127.0.0.1:3000/todo/list');
+    let data = await response.json();
+    insertdataAsyn(data);
+}
+function insertdataAsyn(data) {
+    var text = document.createElement("div")
+    text.setAttribute("id" , "text");
+    document.getElementById("api").appendChild(text)
+    for (var i = 0; i < data.length; i++) {
+      var div = document.createElement("div");
+      var btn = document.createElement("BUTTON");
+      btn.setAttribute("id" , data[i].id);
+      btn.setAttribute("onClick" ,"deleteValue();");
+      btn.innerHTML = "DELETE";
+      var btnedit = document.createElement("BUTTON");
+      btnedit.setAttribute("id" , data[i].id);
+      btnedit.setAttribute("value" , data[i].value);
+      btnedit.setAttribute("onClick" ,"editValue();");
+      btnedit.innerHTML = "EDIT";
+      div.innerHTML = 'UserId: ' + data[i].id +' Title: ' + data[i].value + '<hr>';
+      document.getElementById("api").appendChild(btn);
+      document.getElementById("api").appendChild(btnedit);
+      document.getElementById("api").appendChild(div);
+    }
+}
+dataAsync();
+
+function getInputValue(){
+    let inputVal = document.getElementById("myInput").value;
+    fetch('http://127.0.0.1:3000/todo/add/'+inputVal,{
+        method: 'POST',
+    });
+    document.location.reload();
+}
+
+function deleteValue(){
+    fetch('http://127.0.0.1:3000/todo/delete/'+event.srcElement.id,{
+        method: 'DELETE'
+    });
+    document.location.reload();
+}
+
+var old_value
+function editValue(){
+    document.getElementById("myBtn_edit").style.display = "block";
+    document.getElementById("myBtn").style.display = "none";
+    old_value = event.srcElement.value;
+    document.getElementById("myInput").value = event.srcElement.value;
+}
+
+function geteditedValue(){
+    let new_value = document.getElementById("myInput").value
+    fetch('http://127.0.0.1:3000/todo/edit/'+old_value + '/' + new_value,{
+        method: 'PUT'
+    });
+    document.getElementById("myBtn").style.display = "block";
+    document.getElementById("myBtn_edit").style.display = "none";
+    document.getElementById("myInput").value = ""
+    document.location.reload();
+}
